@@ -1,0 +1,19 @@
+{
+  "id": "./",
+  "name": "BUYOUT — 架空の会社を買い占める放置相場",
+  "short_name": "BUYOUT",
+  "description": "架空の会社の株を売り買いして、配当で資産を増やす放置ゲーム。閉じている間も相場とニュースは動き続け、開くと留守の間の配当がまとめて入る。全 8 社の株を買い占めたらクリア。",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#15120e",
+  "theme_color": "#15120e",
+  "lang": "ja",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
+    { "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}

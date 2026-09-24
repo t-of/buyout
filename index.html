@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#15120e">
+  <meta name="description" content="架空の会社の株を売り買いして、配当で資産を増やす放置ゲーム。閉じている間も相場とニュースは動き続け、開くと留守の間の配当がまとめて入る。全 8 社の株を買い占めたらクリア。">
+  <title>BUYOUT — 架空の会社を買い占める放置相場</title>
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="BUYOUT">
+  <meta property="og:title" content="BUYOUT — 架空の会社を買い占める放置相場">
+  <meta property="og:description" content="架空の会社の株を売り買いして、配当で資産を増やす放置ゲーム。閉じている間も相場とニュースは動き続け、開くと留守の間の配当がまとめて入る。全 8 社の株を買い占めたらクリア。">
+  <meta property="og:url" content="https://t-of.github.io/buyout/">
+  <meta property="og:image" content="https://t-of.github.io/buyout/icons/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="ja_JP">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <!-- apple-mobile-web-app-status-bar-style は付けない（black-translucent だと iOS 26 で上部が隠れる） -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="BUYOUT">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./icons/icon.svg" type="image/svg+xml">
+  <link rel="icon" type="image/png" sizes="32x32" href="./icons/favicon-32.png">
+  <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
+
+  <link rel="stylesheet" href="./webapp-kit/webapp-kit.css">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <main class="app">
+    <header class="bar">
+      <h1 class="logo">BUYOUT</h1>
+      <div class="bar__actions">
+        <button class="pill" data-sound aria-pressed="true"><span>音 オン</span></button>
+        <button class="round" id="helpBtn" aria-label="遊び方と注意">？</button>
+      </div>
+    </header>
+
+    <section class="summary">
+      <p class="label">総資産</p>
+      <p class="total num" id="total">—</p>
+      <dl class="sub">
+        <div><dt>現金</dt><dd class="num" id="cash">—</dd></div>
+        <div><dt>評価損益</dt><dd class="num" id="pl">—</dd></div>
+      </dl>
+      <p class="fiction">架空の会社・架空の相場のゲームです</p>
+    </section>
+
+    <section class="divi" aria-label="次の配当">
+      <div class="divi__row">
+        <span>次の配当まで <b class="num" id="divLeft">—</b> 秒</span>
+        <span class="num" id="divYen"></span>
+      </div>
+      <div class="meter"><i id="divBar"></i></div>
+    </section>
+
+    <section class="block">
+      <h2>ニュース</h2>
+      <ul class="news" id="news"></ul>
+    </section>
+
+    <section class="block">
+      <h2>会社 <span class="muted" id="boCount"></span></h2>
+      <ul class="list" id="list"></ul>
+    </section>
+
+    <footer class="foot">
+      <div class="foot__btns">
+        <button class="pill" data-wak="share" id="shareBtn">共有</button>
+        <button class="pill" data-wak="install" hidden>アプリにする</button>
+      </div>
+      <p class="credit"><a href="/">T.OF...</a> のアプリ</p>
+    </footer>
+  </main>
+
+  <!-- 初回だけ -->
+  <dialog class="sheet" id="intro">
+    <h2 class="sheet__title">これはゲームです</h2>
+    <ul class="notes">
+      <li>登場する会社・株価・ニュースはすべて架空で、実在の会社・市場・出来事とは関係ありません。</li>
+      <li>ゲームのお金は本物のお金ではなく、買うことも換金することもできません。</li>
+      <li>投資の勧誘や助言ではありません。現実の投資の参考にはしないでください。</li>
+      <li>記録はこの端末にだけ保存し、どこにも送りません。</li>
+    </ul>
+    <p class="muted">手持ちは 10,000 円（ゲームのお金）。架空の会社の株を買って、配当で増やし、全 8 社の株を買い占めたらクリアです。</p>
+    <button class="btn btn--main" id="introStart">はじめる</button>
+  </dialog>
+
+  <dialog class="sheet" id="help">
+    <div class="sheet__head">
+      <h2 class="sheet__title">遊び方</h2>
+      <button class="round" data-close aria-label="閉じる">×</button>
+    </div>
+    <ol class="steps">
+      <li>手持ちは 10,000 円（ゲームのお金）。会社を選んで株を買う。</li>
+      <li>持っている株には <b>90 秒ごと</b>に配当が入る。閉じていても、開いたときに留守の間の分（最大 8 時間）がまとめて入る。</li>
+      <li>株価はいつも上がり下がりし、ニュースで急に動く。安いときに買い、高いときに売れば増える。</li>
+      <li>増えたお金でもっと大きな会社を買っていき、<b>全 8 社の株を全部持ったらクリア</b>。</li>
+    </ol>
+    <p class="muted">現実の 1 秒がゲーム内の 1 日。90 日（90 秒）で 1 期、360 日で 1 年。</p>
+    <h3>注意</h3>
+    <ul class="notes">
+      <li>これはゲームです。登場する会社・株価・ニュースはすべて架空で、実在の会社・市場・出来事とは関係ありません。</li>
+      <li>ゲームのお金は本物のお金ではなく、買うことも換金することもできません。</li>
+      <li>投資の勧誘や助言ではありません。現実の投資の参考にはしないでください。</li>
+      <li>記録はこの端末にだけ保存し、どこにも送りません。</li>
+    </ul>
+  </dialog>
+
+  <dialog class="sheet" id="company">
+    <div class="sheet__head">
+      <div>
+        <h2 class="sheet__title" id="cName"></h2>
+        <p class="muted" id="cMeta"></p>
+      </div>
+      <button class="round" data-close aria-label="閉じる">×</button>
+    </div>
+    <p class="quote"><span class="num" id="cPrice"></span> <span class="num" id="cChg"></span></p>
+    <div class="seg" role="group" aria-label="チャートの期間">
+      <button data-range="30" aria-pressed="true">1 か月</button>
+      <button data-range="360" aria-pressed="false">1 年</button>
+    </div>
+    <svg class="chart" id="cChart" viewBox="0 0 320 140" preserveAspectRatio="none" aria-hidden="true">
+      <path class="chart__area" d=""></path>
+      <polyline class="chart__line" points=""></polyline>
+    </svg>
+    <p class="range muted num" id="cRange"></p>
+    <dl class="grid">
+      <div><dt>保有</dt><dd class="num" id="cHeld"></dd></div>
+      <div><dt>評価額</dt><dd class="num" id="cValue"></dd></div>
+      <div><dt>損益</dt><dd class="num" id="cPl"></dd></div>
+      <div><dt>1 期の配当</dt><dd class="num" id="cDiv"></dd></div>
+    </dl>
+    <p class="badge" id="cBo" hidden>買い占め</p>
+    <p class="trade__label">買う</p>
+    <div class="trade">
+      <button class="btn btn--buy" data-buy="1/4"><span>現金の 1/4</span><small class="num"></small></button>
+      <button class="btn btn--buy" data-buy="1/2"><span>現金の 1/2</span><small class="num"></small></button>
+      <button class="btn btn--buy" data-buy="1/1"><span>買えるだけ</span><small class="num"></small></button>
+    </div>
+    <p class="trade__label">売る</p>
+    <div class="trade trade--2">
+      <button class="btn btn--sell" data-sell="half"><span>半分</span><small class="num"></small></button>
+      <button class="btn btn--sell" data-sell="all"><span>全部</span><small class="num"></small></button>
+    </div>
+    <h3>この会社に関係するニュース</h3>
+    <ul class="news" id="cNews"></ul>
+  </dialog>
+
+  <dialog class="sheet" id="welcome">
+    <h2 class="sheet__title">おかえりなさい</h2>
+    <p id="wAway"></p>
+    <p class="big num" id="wGain"></p>
+    <p class="num" id="wTotal"></p>
+    <p class="muted" id="wCap" hidden>配当は 8 時間分まで</p>
+    <h3>留守の間のニュース</h3>
+    <ul class="news" id="wNews"></ul>
+    <button class="btn btn--main" data-close>つづける</button>
+  </dialog>
+
+  <dialog class="sheet" id="clear">
+    <h2 class="sheet__title">8 社を買い占めた</h2>
+    <p id="clearText"></p>
+    <p class="muted">架空の会社・架空の相場のゲームです。このまま遊び続けられます。</p>
+    <button class="btn btn--main" id="clearShare">共有する</button>
+    <button class="btn" data-close>つづける</button>
+  </dialog>
+
+  <p class="toast" id="toast" role="status" hidden></p>
+
+  <script src="./webapp-kit/webapp-kit.js"></script>
+  <script type="module" src="./main.js"></script>
+</body>
+</html>
