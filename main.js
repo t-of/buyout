@@ -309,8 +309,9 @@ function toast(msg) {
   const el = $('toast');
   el.textContent = msg;
   el.hidden = false;
+  if (el.showPopover && !el.matches(':popover-open')) el.showPopover();   // 開いているシートより上に出す
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => { el.hidden = true; }, 5000);
+  toastTimer = setTimeout(() => { if (el.hidePopover && el.matches(':popover-open')) el.hidePopover(); el.hidden = true; }, 5000);
 }
 
 // ---- 時間を進める ----
@@ -321,7 +322,7 @@ function step(resumed = false) {
   const since = state.lastSeen;
   const before = totals(state, since).total;
   const r = advance(state, t);
-  if (rescue(state, t)) toast('現金が足りなくなったので、10,000 円に戻しました');
+  const rescued = rescue(state, t);
   store();
 
   const latest = newsBefore(t, { max: 1 })[0]?.slot ?? null;
@@ -332,10 +333,11 @@ function step(resumed = false) {
   }
   lastNewsSlot = latest;
   render(t);
+  if (rescued) toast('現金が足りなくなったので、10,000 円に戻しました');   // シートより後に出して上に重ねる
 }
 function showWelcome(r, since, before, t) {
   $('wAway').textContent = `${duration(r.elapsed)} 留守にしていました。`;
-  $('wGain').textContent = r.n ? `配当 ${r.n} 回で +${fmtYen(r.gain)}` : '配当はありませんでした';
+  $('wGain').textContent = r.gain > 0n ? `配当 ${r.n} 回で +${fmtYen(r.gain)}` : '配当はありませんでした';
   $('wTotal').textContent = `総資産 ${fmtYen(before)} → ${fmtYen(totals(state, t).total)}`;
   $('wCap').hidden = !r.capped;
   newsList($('wNews'), newsBefore(t, { max: 3, since, maxSlots: 2000 }), t);
@@ -356,5 +358,6 @@ document.addEventListener('visibilitychange', () => {
 addEventListener('pagehide', store);
 
 start();
+// 読めなかったときは新しい状態なので必ず初回のシートが出る。その中に一言出す（トーストはシートの下に隠れる）
+$('introBroken').hidden = !brokenSave;
 if (!state.seenIntro) showSheet($('intro'));
-if (brokenSave) toast('保存データが読めなかったので、新しく始めました（元のデータは残してあります）');

@@ -80,6 +80,7 @@
   <!-- 初回だけ -->
   <dialog class="sheet" id="intro">
     <h2 class="sheet__title">これはゲームです</h2>
+    <p class="warn" id="introBroken" hidden>保存データが読めなかったので、新しく始めます（元のデータは残してあります）。</p>
     <ul class="notes">
       <li>登場する会社・株価・ニュースはすべて架空で、実在の会社・市場・出来事とは関係ありません。</li>
       <li>ゲームのお金は本物のお金ではなく、買うことも換金することもできません。</li>
@@ -170,7 +171,7 @@
     <button class="btn" data-close>つづける</button>
   </dialog>
 
-  <p class="toast" id="toast" role="status" hidden></p>
+  <p class="toast" id="toast" role="status" popover="manual" hidden></p>
 
   <script src="./webapp-kit/webapp-kit.js"></script>
   <script type="module" src="./main.js"></script>
