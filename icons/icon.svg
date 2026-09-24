@@ -1,1 +1,24 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="#15120e"/><text x="256" y="256" dy=".35em" text-anchor="middle" font-family="system-ui,sans-serif" font-weight="700" font-size="280" fill="#eceef3">B</text></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+<defs>
+<linearGradient id="bg" x1="0" y1="0" x2="0.3" y2="1"><stop offset="0" stop-color="#241c14"/><stop offset="1" stop-color="#100c08"/></linearGradient>
+<radialGradient id="glow" cx="0.5" cy="0.38" r="0.62"><stop offset="0" stop-color="#3a2c18" stop-opacity="0.55"/><stop offset="1" stop-color="#3a2c18" stop-opacity="0"/></radialGradient>
+</defs>
+<rect width="512" height="512" rx="112" fill="url(#bg)"/>
+<rect width="512" height="512" fill="url(#glow)"/>
+<line x1="95" y1="369" x2="415" y2="369" stroke="rgba(255,236,200,0.14)" stroke-width="5" stroke-linecap="round"/>
+<line x1="104" y1="366" x2="104" y2="216" stroke="#c98f2f" stroke-width="16" stroke-linecap="round"/>
+<circle cx="104" cy="366" r="11" fill="#c98f2f"/>
+<path d="M104.0,212.0 L162.0,239.0 L104.0,266.0 Z" fill="#f2b64a" stroke="#c98f2f" stroke-width="4" stroke-linejoin="round"/>
+<line x1="175" y1="366" x2="175" y2="156" stroke="#c98f2f" stroke-width="16" stroke-linecap="round"/>
+<circle cx="175" cy="366" r="11" fill="#c98f2f"/>
+<path d="M175.0,152.0 L233.0,179.0 L175.0,206.0 Z" fill="#f2b64a" stroke="#c98f2f" stroke-width="4" stroke-linejoin="round"/>
+<line x1="246" y1="366" x2="246" y2="198" stroke="#6b5c48" stroke-width="16" stroke-linecap="round"/>
+<circle cx="246" cy="366" r="11" fill="#6b5c48"/>
+<path d="M246.0,194.0 L304.0,221.0 L246.0,248.0 Z" fill="none" stroke="#8f7c62" stroke-width="9" stroke-linejoin="round" opacity="0.9"/>
+<line x1="317" y1="366" x2="317" y2="134" stroke="#c98f2f" stroke-width="16" stroke-linecap="round"/>
+<circle cx="317" cy="366" r="11" fill="#c98f2f"/>
+<path d="M317.0,130.0 L375.0,157.0 L317.0,184.0 Z" fill="#f2b64a" stroke="#c98f2f" stroke-width="4" stroke-linejoin="round"/>
+<line x1="388" y1="366" x2="388" y2="180" stroke="#6b5c48" stroke-width="16" stroke-linecap="round"/>
+<circle cx="388" cy="366" r="11" fill="#6b5c48"/>
+<path d="M388.0,176.0 L446.0,203.0 L388.0,230.0 Z" fill="none" stroke="#8f7c62" stroke-width="9" stroke-linejoin="round" opacity="0.9"/>
+</svg>
