@@ -52,8 +52,9 @@ h2, h3, p, ul, ol, dl, dd { margin: 0; }
 }
 
 /* ---- タイトル ---- */
-.title__head { text-align: center; padding-top: 12px; }
-.title__name { margin: 0 0 4px; font-size: 30px; font-weight: 900; letter-spacing: 0.14em; color: var(--accent); }
+/* 中身を画面のまん中に寄せ、下だけが空かないようにする（下の .foot も margin-top: auto） */
+.title__head { text-align: center; padding-top: 12px; margin-top: auto; }
+.title__name { margin: 0 0 4px; font-size: 40px; font-weight: 900; letter-spacing: 0.14em; color: var(--accent); }
 .title__catch { margin: 0; color: var(--muted); font-size: 14px; }
 .record {
   background: var(--surface); border: 1px solid var(--line); border-radius: 18px;
