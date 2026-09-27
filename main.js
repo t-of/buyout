@@ -27,6 +27,7 @@ if ('serviceWorker' in navigator) {
 }
 
 const $ = (id) => document.getElementById(id);
+const titleEl = $('title'), playEl = $('play');
 
 // ---- 保存 ----
 // 読めないときは消さずに buyout.save.broken に写してから新しく始める
@@ -201,6 +202,11 @@ function render(t = Date.now()) {
   // 共有の文面（切り出されても本物の投資の成績に見えないよう「架空」「ゲーム」を必ず入れる）
   $('shareBtn').dataset.wakText = `BUYOUT（架空の相場ゲーム）で総資産 ${fmtYen(tot.total)}。${bo}/8 社を買い占め中。`;
 
+  if (state.seenIntro) {
+    $('rTotal').textContent = fmtYen(tot.total);
+    $('rBo').textContent = `買い占め ${bo}/8 社`;
+  }
+
   if (openId) renderCompany(t);
 }
 
@@ -283,18 +289,13 @@ function showSheet(d) {
   if (!d.open) { d.showModal(); Sound.tap(); }
 }
 document.querySelectorAll('dialog').forEach((d) => {
-  // 外（背景）をタップしても閉じる。初回のシートは［はじめる］でだけ閉じる
-  d.addEventListener('click', (e) => { if (e.target === d && d.id !== 'intro') d.close(); });
-  d.addEventListener('cancel', (e) => { if (d.id === 'intro') e.preventDefault(); });
+  // 外（背景）をタップしても閉じる
+  d.addEventListener('click', (e) => { if (e.target === d) d.close(); });
   d.addEventListener('close', () => { Sound.tap(); if (d.id === 'company') openId = null; });
   d.querySelectorAll('[data-close]').forEach((b) => b.addEventListener('click', () => d.close()));
 });
 $('helpBtn').addEventListener('click', () => showSheet($('help')));
-$('introStart').addEventListener('click', () => {
-  state.seenIntro = true;
-  store();
-  $('intro').close();
-});
+$('helpBtn2').addEventListener('click', () => showSheet($('help')));
 
 function showClear() {
   const ms = state.clearedAt - state.createdAt;
@@ -358,6 +359,36 @@ document.addEventListener('visibilitychange', () => {
 addEventListener('pagehide', store);
 
 start();
-// 読めなかったときは新しい状態なので必ず初回のシートが出る。その中に一言出す（トーストはシートの下に隠れる）
-$('introBroken').hidden = !brokenSave;
-if (!state.seenIntro) showSheet($('intro'));
+
+// ---- タイトル ⇔ 遊ぶ ----
+
+function showTitle() {
+  $('record').hidden = !state.seenIntro;
+  $('reset-btn').hidden = !state.seenIntro;
+  $('start-btn').textContent = state.seenIntro ? 'つづきから' : 'はじめる';
+  render(Date.now());
+  playEl.hidden = true;
+  titleEl.hidden = false;
+  window.scrollTo(0, 0);
+}
+function showPlay() {
+  titleEl.hidden = true;
+  playEl.hidden = false;
+  window.scrollTo(0, 0);
+}
+$('start-btn').addEventListener('click', () => {
+  Sound.tap();
+  if (!state.seenIntro) { state.seenIntro = true; store(); }
+  showPlay();
+});
+$('back-btn').addEventListener('click', () => { Sound.tap(); showTitle(); });
+$('reset-btn').addEventListener('click', () => {
+  if (!confirm('はじめから遊びますか？ これまでの記録は消えます。')) return;
+  Object.assign(state, newState(Date.now()));
+  store();
+  showTitle();
+});
+
+// 読めなかったときは新しく始めているので、その旨をトーストで伝える
+if (brokenSave) toast('保存データが読めなかったので、新しく始めます（元のデータは残してあります）');
+showTitle();

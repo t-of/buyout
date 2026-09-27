@@ -31,12 +31,44 @@
   <link rel="stylesheet" href="./style.css">
 </head>
 <body>
-  <main class="app">
+  <!-- タイトル -->
+  <main class="app title" id="title">
+    <header class="title__head">
+      <h1 class="title__name">BUYOUT</h1>
+      <p class="title__catch">架空の会社を買い占める放置相場</p>
+    </header>
+
+    <section class="record" id="record" hidden>
+      <p class="label">総資産</p>
+      <p class="total num" id="rTotal">—</p>
+      <p class="muted" id="rBo"></p>
+    </section>
+
+    <button class="btn btn--main" id="start-btn">はじめる</button>
+
+    <div class="title__row">
+      <button class="pill" id="helpBtn">遊び方と注意</button>
+      <button class="pill" id="reset-btn" hidden>はじめから</button>
+    </div>
+
+    <footer class="foot">
+      <div class="foot__btns">
+        <button class="pill" data-wak="share">共有</button>
+        <button class="pill" data-wak="install" hidden>アプリにする</button>
+      </div>
+      <p class="fiction">架空の会社・架空の相場のゲームです。投資の勧誘や助言ではありません。</p>
+      <p class="credit"><a href="/">T.OF...</a> のアプリ・<a href="https://t-of.github.io/contact/">問い合わせ</a></p>
+    </footer>
+  </main>
+
+  <!-- 遊ぶ -->
+  <main class="app" id="play" hidden>
     <header class="bar">
+      <button class="pill" id="back-btn">もどる</button>
       <h1 class="logo">BUYOUT</h1>
       <div class="bar__actions">
         <button class="pill" data-sound aria-pressed="true"><span>音 オン</span></button>
-        <button class="round" id="helpBtn" aria-label="遊び方と注意">？</button>
+        <button class="round" id="helpBtn2" aria-label="遊び方と注意">？</button>
       </div>
     </header>
 
@@ -76,20 +108,6 @@
       <p class="credit"><a href="/">T.OF...</a> のアプリ・<a href="https://t-of.github.io/contact/">問い合わせ</a></p>
     </footer>
   </main>
-
-  <!-- 初回だけ -->
-  <dialog class="sheet" id="intro">
-    <h2 class="sheet__title">これはゲームです</h2>
-    <p class="warn" id="introBroken" hidden>保存データが読めなかったので、新しく始めます（元のデータは残してあります）。</p>
-    <ul class="notes">
-      <li>登場する会社・株価・ニュースはすべて架空で、実在の会社・市場・出来事とは関係ありません。</li>
-      <li>ゲームのお金は本物のお金ではなく、買うことも換金することもできません。</li>
-      <li>投資の勧誘や助言ではありません。現実の投資の参考にはしないでください。</li>
-      <li>記録はこの端末にだけ保存し、どこにも送りません。</li>
-    </ul>
-    <p class="muted">手持ちは 10,000 円（ゲームのお金）。架空の会社の株を買って、配当で増やし、全 8 社の株を買い占めたらクリアです。</p>
-    <button class="btn btn--main" id="introStart">はじめる</button>
-  </dialog>
 
   <dialog class="sheet" id="help">
     <div class="sheet__head">

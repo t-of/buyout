@@ -51,6 +51,17 @@ h2, h3, p, ul, ol, dl, dd { margin: 0; }
   -webkit-user-select: none;
 }
 
+/* ---- タイトル ---- */
+.title__head { text-align: center; padding-top: 12px; }
+.title__name { margin: 0 0 4px; font-size: 30px; font-weight: 900; letter-spacing: 0.14em; color: var(--accent); }
+.title__catch { margin: 0; color: var(--muted); font-size: 14px; }
+.record {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 18px;
+  padding: 14px 16px; text-align: center;
+}
+.title__row { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+.title .foot { margin-top: auto; }
+
 .bar { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
 .logo { margin: 0; font-size: 20px; font-weight: 900; letter-spacing: 0.18em; color: var(--accent); }
 .bar__actions { display: flex; gap: 8px; }
